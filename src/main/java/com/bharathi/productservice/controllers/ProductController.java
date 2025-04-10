@@ -16,7 +16,7 @@ public class ProductController {
         return new Product();
     }
 
-    @GetMapping("/products")
+    @GetMapping
     public List<Product> getAllProducts(){
         return new ArrayList<Product>();
     }
