@@ -1,13 +1,13 @@
 package com.bharathi.productservice.models;
 
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Setter
-@Getter
+
+@Data
 public class Category {
 
     private long id;
     private String title;
+
 }
