@@ -25,7 +25,7 @@ public class FakeStoreProductService implements ProductService {
 
 
     @Override
-    public Product getProductById(long id) {
+    public Product getProductById(Long id) {
         FakeStoreProductDto fakeStoreProductDto =
                 restTemplate.getForObject("https://fakestoreapi.com/products/" + id, FakeStoreProductDto.class);
 
@@ -77,7 +77,17 @@ public class FakeStoreProductService implements ProductService {
 
     @Override
     public Product addProduct(Product product) {
-        return null;
+
+        FakeStoreProductDto requestDto = convertProductToFakeStoreProductDto(product);
+
+        RequestCallback requestCallback = restTemplate.httpEntityCallback(requestDto, FakeStoreProductDto.class);
+        HttpMessageConverterExtractor<FakeStoreProductDto> responseExtractor =
+                new HttpMessageConverterExtractor<>(FakeStoreProductDto.class, restTemplate.getMessageConverters());
+        FakeStoreProductDto fakeStoreProductDto =
+                restTemplate.execute("https://fakestoreapi.com/products", HttpMethod.POST, requestCallback, responseExtractor);
+
+        return convertFakeStoreProductDtoToProduct(fakeStoreProductDto);
+
     }
 
     public FakeStoreProductDto convertProductToFakeStoreProductDto(Product product){
@@ -98,7 +108,7 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public Product replaceProduct(long id, Product product) {
+    public Product replaceProduct(Long id, Product product) {
 
         //cannot use put method from rest template here because put returns null, but our code wants to return a Product
         //restTemplate.put();
@@ -118,7 +128,7 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public Product updateProduct(long id, Product product) {
+    public Product updateProduct(Long id, Product product) {
 
         //convert product to fake store product dto to pass a request body
         FakeStoreProductDto requestDto =
@@ -161,7 +171,7 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public void deleteProduct(long id) {
-
+    public void deleteProduct(Long id) {
+        restTemplate.delete("https://fakestoreapi.com/products/" + id);
     }
 }

@@ -6,15 +6,15 @@ import java.util.List;
 
 public interface ProductService {
 
-    Product getProductById(long id);
+    Product getProductById(Long id);
 
     List<Product> getAllProducts();
 
     Product addProduct(Product product);
 
-    Product replaceProduct(long id, Product product);
+    Product replaceProduct(Long id, Product product);
 
-    Product updateProduct(long id, Product product);
+    Product updateProduct(Long id, Product product);
 
-    void deleteProduct(long id);
+    void deleteProduct(Long id);
 }

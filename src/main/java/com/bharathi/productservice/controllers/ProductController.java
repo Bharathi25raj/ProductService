@@ -40,11 +40,13 @@ public class ProductController {
     }
 
     //create a new product
+    @PostMapping
     public Product createProduct(@RequestBody Product product){
         return productService.addProduct(product);
     }
 
     //delete a product
+    @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable("id") long id){
         productService.deleteProduct(id);
     }
