@@ -2,6 +2,9 @@ package com.bharathi.productservice.controllers;
 
 import com.bharathi.productservice.models.Product;
 import com.bharathi.productservice.services.ProductService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,37 +20,43 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    private Product getProductById(@PathVariable("id") long id){
-        return productService.getProductById(id);
+    private ResponseEntity<Product> getProductById(@PathVariable("id") long id){
+        Product product = productService.getProductById(id);
+        return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
     //get all products
     @GetMapping
-    public List<Product> getAllProducts(){
-        return productService.getAllProducts();
+    public ResponseEntity<List<Product>> getAllProducts(){
+        List<Product> products = productService.getAllProducts();
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
     //Replace a product
     @PutMapping("/{id}")
-    public Product replaceProduct(@PathVariable("id") long id, @RequestBody Product product){
-        return productService.replaceProduct(id, product);
+    public ResponseEntity<Product> replaceProduct(@PathVariable("id") long id, @RequestBody Product product){
+        Product replacedProduct = productService.replaceProduct(id, product);
+        return new ResponseEntity<>(replacedProduct, HttpStatus.OK);
     }
 
     //update a product
     @PatchMapping("/{id}")
-    public Product updateProduct(@PathVariable("id") long id, @RequestBody Product product){
-        return productService.updateProduct(id, product);
+    public ResponseEntity<Product> updateProduct(@PathVariable("id") long id, @RequestBody Product product){
+        Product updatedProduct = productService.updateProduct(id, product);
+        return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
     }
 
     //create a new product
     @PostMapping
-    public Product createProduct(@RequestBody Product product){
-        return productService.addProduct(product);
+    public ResponseEntity<Product> createProduct(@RequestBody Product product){
+        Product newProduct = productService.addProduct(product);
+        return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
     }
 
     //delete a product
     @DeleteMapping("/{id}")
-    public void deleteProduct(@PathVariable("id") long id){
+    public ResponseEntity<Void> deleteProduct(@PathVariable("id") long id){
         productService.deleteProduct(id);
+        return ResponseEntity.noContent().build();
     }
 }
