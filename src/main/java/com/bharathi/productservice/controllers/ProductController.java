@@ -1,5 +1,6 @@
 package com.bharathi.productservice.controllers;
 
+import com.bharathi.productservice.exceptions.ProductControllerSpecificException;
 import com.bharathi.productservice.models.Product;
 import com.bharathi.productservice.services.ProductService;
 import org.springframework.http.HttpStatus;
@@ -15,21 +16,23 @@ public class ProductController {
 
     private ProductService productService;
 
-    ProductController(ProductService productService){
+    public ProductController(ProductService productService){
         this.productService = productService;
     }
 
     @GetMapping("/{id}")
-    private ResponseEntity<Product> getProductById(@PathVariable("id") Long id){
+    public ResponseEntity<Product> getProductById(@PathVariable("id") Long id) throws Exception {
         Product product = productService.getProductById(id);
         return new ResponseEntity<>(product, HttpStatus.OK);
+        //throw new RuntimeException("Product ID not found");
     }
 
     //get all products
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts(){
         List<Product> products = productService.getAllProducts();
-        return new ResponseEntity<>(products, HttpStatus.OK);
+        //return new ResponseEntity<>(products, HttpStatus.OK);
+        return ResponseEntity.ok(products);
     }
 
     //Replace a product
@@ -59,4 +62,12 @@ public class ProductController {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }
+
+
+    //Controller Advice - Exception Handler specific to a Controller
+    @ExceptionHandler(ProductControllerSpecificException.class)
+    public ResponseEntity<String> handleProductControllerSpecificException(ProductControllerSpecificException ex){
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
 }

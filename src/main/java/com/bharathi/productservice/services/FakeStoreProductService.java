@@ -1,14 +1,14 @@
 package com.bharathi.productservice.services;
 
 import com.bharathi.productservice.dtos.FakeStoreProductDto;
+import com.bharathi.productservice.exceptions.InvalidProductIdException;
+import com.bharathi.productservice.exceptions.ProductControllerSpecificException;
 import com.bharathi.productservice.models.Category;
 import com.bharathi.productservice.models.Product;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpMessageConverterExtractor;
 import org.springframework.web.client.RequestCallback;
-import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -25,11 +25,40 @@ public class FakeStoreProductService implements ProductService {
 
 
     @Override
-    public Product getProductById(Long id) {
+    public Product getProductById(Long id) throws Exception {
         FakeStoreProductDto fakeStoreProductDto =
                 restTemplate.getForObject("https://fakestoreapi.com/products/" + id, FakeStoreProductDto.class);
 
-        return fakeStoreProductDto == null ? null : convertFakeStoreProductDtoToProduct(fakeStoreProductDto);
+        /*
+        To test arithmetic exception, just for learning purpose
+        try{
+           int a = 0;
+           int b = 5/a;
+        } catch (ArithmeticException ex){
+           throw new ArithmeticException();
+        }
+        */
+
+        /*
+        To test ArrayIndexOutOfBoundsException, just for learning purpose
+        int size = 2;
+        try{
+            int[] arr = new int[size];
+            arr[0] = 1;
+            arr[1] = 2;
+            arr[2] = 4;
+        } catch (ArrayIndexOutOfBoundsException e){
+            throw new ArrayIndexOutOfBoundsException(size);
+        }
+        */
+        //For learning purpose
+        //throw new ProductControllerSpecificException("Exception specific to Product Controller");
+
+        if(fakeStoreProductDto == null){
+            throw new InvalidProductIdException("Invalid product id passed, please try with a valid id", id);
+        }
+
+        return convertFakeStoreProductDtoToProduct(fakeStoreProductDto);
     }
 
     public Product convertFakeStoreProductDtoToProduct(FakeStoreProductDto fakeStoreProductDto) {
