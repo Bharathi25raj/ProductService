@@ -21,7 +21,6 @@ public class ProductController {
         return productService.getProductById(id);
     }
 
-
     //get all products
     @GetMapping
     public List<Product> getAllProducts(){

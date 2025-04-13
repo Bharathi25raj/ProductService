@@ -10,11 +10,11 @@ import lombok.Setter;
 @Getter
 public class Product {
 
-    private long id;
+    private Long id;
     private String title;
     private String description;
     private Category category;
-    private double price;
+    private Double price;
     private String image;
 
 }

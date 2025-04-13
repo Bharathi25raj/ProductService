@@ -3,7 +3,12 @@ package com.bharathi.productservice.services;
 import com.bharathi.productservice.dtos.FakeStoreProductDto;
 import com.bharathi.productservice.models.Category;
 import com.bharathi.productservice.models.Product;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpMessageConverterExtractor;
+import org.springframework.web.client.RequestCallback;
+import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -75,14 +80,84 @@ public class FakeStoreProductService implements ProductService {
         return null;
     }
 
+    public FakeStoreProductDto convertProductToFakeStoreProductDto(Product product){
+        FakeStoreProductDto fakeStoreProductDto = new FakeStoreProductDto();
+        fakeStoreProductDto.setId(product.getId());
+        fakeStoreProductDto.setTitle(product.getTitle());
+        fakeStoreProductDto.setDescription(product.getDescription());
+        fakeStoreProductDto.setPrice(product.getPrice());
+        fakeStoreProductDto.setImage(product.getImage());
+
+        if(product.getCategory() == null){
+            fakeStoreProductDto.setCategory(null);
+        } else {
+            fakeStoreProductDto.setCategory(product.getCategory().getTitle());
+        }
+
+        return fakeStoreProductDto;
+    }
+
     @Override
     public Product replaceProduct(long id, Product product) {
-        return null;
+
+        //cannot use put method from rest template here because put returns null, but our code wants to return a Product
+        //restTemplate.put();
+
+        //convert product to fake store product dto to pass a request body
+        FakeStoreProductDto requestDto = convertProductToFakeStoreProductDto(product);
+
+        //In that case, we are using the low level code of rest template, a method called execute which returns something
+        RequestCallback requestCallback = restTemplate.httpEntityCallback(requestDto, FakeStoreProductDto.class);
+        HttpMessageConverterExtractor<FakeStoreProductDto> responseExtractor =
+                new HttpMessageConverterExtractor<>(FakeStoreProductDto.class,
+                restTemplate.getMessageConverters());
+        FakeStoreProductDto responseDto =
+                restTemplate.execute("https://fakestoreapi.com/products/" + id, HttpMethod.PUT, requestCallback, responseExtractor);
+
+        return convertFakeStoreProductDtoToProduct(responseDto);
     }
 
     @Override
     public Product updateProduct(long id, Product product) {
-        return null;
+
+        //convert product to fake store product dto to pass a request body
+        FakeStoreProductDto requestDto =
+                restTemplate.getForObject("https://fakestoreapi.com/products/" + id, FakeStoreProductDto.class);
+
+
+        if(requestDto == null){
+            return null;
+        }
+
+        if(product.getTitle() != null){
+            requestDto.setTitle(product.getTitle());
+        }
+
+        if(product.getDescription() != null){
+            requestDto.setDescription(product.getDescription());
+        }
+
+        if(product.getPrice() != null){
+            requestDto.setPrice(product.getPrice());
+        }
+
+        if(product.getImage() != null){
+            requestDto.setImage(product.getImage());
+        }
+
+        if(product.getCategory() != null && product.getCategory().getTitle() != null){
+            requestDto.setCategory(product.getCategory().getTitle());
+        }
+
+
+        RequestCallback requestCallback = restTemplate.httpEntityCallback(requestDto, FakeStoreProductDto.class);
+        HttpMessageConverterExtractor<FakeStoreProductDto> responseExtractor =
+                new HttpMessageConverterExtractor<>(FakeStoreProductDto.class,
+                        restTemplate.getMessageConverters());
+        FakeStoreProductDto responseDto =
+                restTemplate.execute("https://fakestoreapi.com/products/" + id, HttpMethod.PATCH, requestCallback, responseExtractor);
+
+        return convertFakeStoreProductDtoToProduct(responseDto);
     }
 
     @Override

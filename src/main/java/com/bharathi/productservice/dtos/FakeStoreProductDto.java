@@ -1,7 +1,6 @@
 package com.bharathi.productservice.dtos;
 
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,11 +9,11 @@ import lombok.Setter;
 @Getter
 public class FakeStoreProductDto {
 
-    private long id;
+    private Long id;
     private String title;
     private String description;
     private String category;
-    private double price;
+    private Double price;
     private String image;
 
 }
