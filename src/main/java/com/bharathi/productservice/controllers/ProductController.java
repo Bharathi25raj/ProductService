@@ -2,10 +2,8 @@ package com.bharathi.productservice.controllers;
 
 import com.bharathi.productservice.models.Product;
 import com.bharathi.productservice.services.ProductService;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -23,6 +21,8 @@ public class ProductController {
         return productService.getProductById(id);
     }
 
+
+    //get all products
     @GetMapping
     public List<Product> getAllProducts(){
         return productService.getAllProducts();

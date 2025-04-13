@@ -6,6 +6,7 @@ import com.bharathi.productservice.models.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -45,7 +46,28 @@ public class FakeStoreProductService implements ProductService {
 
     @Override
     public List<Product> getAllProducts() {
-        return List.of();
+
+        //This is not going to work, as in generics, all the types are converted to object types during run time,
+        //and the list of objects returned by the fakestore api cannot be mapped to FakeStoreProductDto
+        //List<FakeStoreProductDto> fakeStoreProductDtoList =
+                //restTemplate.getForObject("https://fakestoreapi.com/products", List.class);
+
+
+        //here the FakeStoreProductDto[] itself is a type, no generics involved here
+        FakeStoreProductDto[] fakeStoreProductDtos =
+                restTemplate.getForObject("https://fakestoreapi.com/products", FakeStoreProductDto[].class);
+
+        if(fakeStoreProductDtos == null){
+            return null;
+        }
+
+        List<Product> products = new ArrayList<>();
+
+        for(FakeStoreProductDto fakeStoreProductDto : fakeStoreProductDtos) {
+            products.add(convertFakeStoreProductDtoToProduct(fakeStoreProductDto));
+        }
+
+        return products;
     }
 
     @Override
