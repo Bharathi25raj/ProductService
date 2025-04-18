@@ -1,6 +1,7 @@
 package com.bharathi.productservice.controllers;
 
 import com.bharathi.productservice.exceptions.ProductControllerSpecificException;
+import com.bharathi.productservice.exceptions.ProductNotFoundException;
 import com.bharathi.productservice.models.Product;
 import com.bharathi.productservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -38,7 +39,7 @@ public class ProductController {
 
     //Replace a product
     @PutMapping("/{id}")
-    public ResponseEntity<Product> replaceProduct(@PathVariable("id") Long id, @RequestBody Product product){
+    public ResponseEntity<Product> replaceProduct(@PathVariable("id") Long id, @RequestBody Product product) throws ProductNotFoundException {
         Product replacedProduct = productService.replaceProduct(id, product);
         return new ResponseEntity<>(replacedProduct, HttpStatus.OK);
     }
