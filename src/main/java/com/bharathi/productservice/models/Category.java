@@ -4,15 +4,15 @@ package com.bharathi.productservice.models;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 
-@Data
+@Getter
+@Setter
 @Entity
-public class Category {
+public class Category extends BaseModel {
 
-    @Id
-    private Long id;
     private String title;
-
 
 }

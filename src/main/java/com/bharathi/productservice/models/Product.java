@@ -15,10 +15,8 @@ import java.util.List;
 @Setter
 @Getter
 @Entity
-public class Product {
+public class Product extends BaseModel {
 
-    @Id
-    private Long id;
     private String title;
     private String description;
 
