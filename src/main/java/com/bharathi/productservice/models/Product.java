@@ -1,6 +1,7 @@
 package com.bharathi.productservice.models;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -17,6 +18,8 @@ public class Product extends BaseModel {
     private String title;
     private String description;
 
+    //Eager by default
+    @JsonManagedReference
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private Category category;
     private Double price;

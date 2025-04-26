@@ -1,5 +1,6 @@
 package com.bharathi.productservice;
 
+import com.bharathi.productservice.models.Category;
 import com.bharathi.productservice.models.Product;
 import com.bharathi.productservice.repositories.CategoryRepository;
 import com.bharathi.productservice.repositories.ProductRepository;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 class ProductServiceApplicationTests {
@@ -62,8 +64,19 @@ class ProductServiceApplicationTests {
     @Test
     void testDeleteCategory(){
         //Deleting this category id should delete all products
-        // associated with this category id as per the cascading type defined in Category model
+        //associated with this category id as per the cascading type defined in Category model
         categoryRepository.deleteById(102L);
+    }
+
+
+    @Test
+    void testFetchTypes(){
+        Optional<Product> optionalProduct = productRepository.findProductById(55L);
+        Product product = optionalProduct.get();
+
+        //Category category = categoryRepository.getCategoryById(3L);
+
+        System.out.println("DEBUG");
     }
 
 }
