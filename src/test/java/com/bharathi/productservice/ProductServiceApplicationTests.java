@@ -1,6 +1,7 @@
 package com.bharathi.productservice;
 
 import com.bharathi.productservice.models.Product;
+import com.bharathi.productservice.repositories.CategoryRepository;
 import com.bharathi.productservice.repositories.ProductRepository;
 import com.bharathi.productservice.repositories.projections.ProductWithIdAndTitle;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,9 @@ class ProductServiceApplicationTests {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    CategoryRepository categoryRepository;
 
     @Test
     void contextLoads() {
@@ -52,6 +56,14 @@ class ProductServiceApplicationTests {
 
         Product product1 = productRepository.queryToGetAProductByPassingTheIdAsInputWithNativeQuery(60L);
         System.out.println("Product By Passing ID as Input Native " + product1.getTitle());
+    }
+
+
+    @Test
+    void testDeleteCategory(){
+        //Deleting this category id should delete all products
+        // associated with this category id as per the cascading type defined in Category model
+        categoryRepository.deleteById(102L);
     }
 
 }

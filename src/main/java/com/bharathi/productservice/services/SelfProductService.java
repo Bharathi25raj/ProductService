@@ -50,12 +50,17 @@ public class SelfProductService implements ProductService {
     @Override
     public Product addProduct(Product product) {
 
+
+        //Commenting out below lines of code, as we have defined cascading type in Product Class,
+        //which will auto save the category object before saving product
+        /*
         Category category = product.getCategory();
 
         if(category.getId() == null){
             Category savedCategory = categoryRepository.save(category);
             product.setCategory(savedCategory);
         }
+        */
 
         return productRepository.save(product);
     }
