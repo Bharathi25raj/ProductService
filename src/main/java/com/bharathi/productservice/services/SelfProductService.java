@@ -2,6 +2,7 @@ package com.bharathi.productservice.services;
 
 import com.bharathi.productservice.exceptions.InvalidProductIdException;
 import com.bharathi.productservice.exceptions.ProductNotFoundException;
+import com.bharathi.productservice.mappers.ProductMapper;
 import com.bharathi.productservice.models.Category;
 import com.bharathi.productservice.models.Product;
 import com.bharathi.productservice.repositories.CategoryRepository;
@@ -19,10 +20,15 @@ public class SelfProductService implements ProductService {
 
     private ProductRepository productRepository;
     private CategoryRepository categoryRepository;
+    private ProductMapper productMapper;
 
-    public SelfProductService(ProductRepository productRepository, CategoryRepository categoryRepository){
+//    @Autowired
+//    private ProductMapper productMapper;
+
+    public SelfProductService(ProductRepository productRepository, CategoryRepository categoryRepository, ProductMapper productMapper){
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.productMapper = productMapper;
     }
 
     @Override
@@ -64,8 +70,36 @@ public class SelfProductService implements ProductService {
     }
 
     @Override
-    public Product updateProduct(Long id, Product product) {
-        return null;
+    public Product updateProduct(Long id, Product product) throws Exception {
+
+        Optional<Product> optionalProduct = productRepository.findProductById(id);
+
+        if(optionalProduct.isEmpty()){
+            throw new ProductNotFoundException("Product not found with a id", id);
+        }
+
+        Product existingProduct = optionalProduct.get();
+
+        productMapper.updateProduct(product, existingProduct);
+
+        //Not recommended to have so many null checks rather use mapper
+        /*
+
+        if(product.getTitle() != null){
+            currentProduct.setTitle(product.getTitle());
+        }
+
+        if(product.getDescription() != null){
+            currentProduct.setDescription(product.getDescription());
+        }
+
+        if(product.getPrice() != null){
+            currentProduct.setPrice(product.getPrice());
+        }
+
+        */
+
+        return productRepository.save(existingProduct);
     }
 
     @Override
