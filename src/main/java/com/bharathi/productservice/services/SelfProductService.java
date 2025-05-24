@@ -50,7 +50,6 @@ public class SelfProductService implements ProductService {
     @Override
     public Product addProduct(Product product) {
 
-
         //Commenting out below lines of code, as we have defined cascading type in Product Class,
         //which will auto save the category object before saving product
         /*
@@ -61,6 +60,18 @@ public class SelfProductService implements ProductService {
             product.setCategory(savedCategory);
         }
         */
+
+        //Adding this logic to use the category if it already exists
+        Category category = product.getCategory();
+        if(category != null && category.getId() != null){
+            if(categoryRepository.findById(category.getId()).isEmpty()){
+                throw new RuntimeException("Category not found with id: " + category.getId());
+            } else {
+                //Attach the existing category to the current persistence context
+                Category existingCategory = categoryRepository.findById(category.getId()).get();
+                product.setCategory(existingCategory);
+            }
+        }
 
         return productRepository.save(product);
     }

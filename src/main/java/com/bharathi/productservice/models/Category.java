@@ -1,10 +1,9 @@
 package com.bharathi.productservice.models;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,7 +20,7 @@ public class Category extends BaseModel {
     //@OneToMany(mappedBy = "category", cascade = {CascadeType.REMOVE}, fetch = FetchType.EAGER)
 
     //Lazy by default
-    @JsonBackReference
+    @JsonManagedReference
     @OneToMany(mappedBy = "category", cascade = {CascadeType.REMOVE})
     private List<Product> products;
 
