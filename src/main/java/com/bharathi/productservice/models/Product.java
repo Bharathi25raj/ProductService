@@ -3,13 +3,13 @@ package com.bharathi.productservice.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 
-
-@Setter
 @Getter
+@Setter
 @Entity
 public class Product extends BaseModel {
 
@@ -22,6 +22,7 @@ public class Product extends BaseModel {
     private Category category;
     private Double price;
     private String image;
+    private int quantity;
 
    /*
        1                    1
