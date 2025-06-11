@@ -16,6 +16,7 @@ import java.util.Optional;
 //We can annotate with @Primary to make this a primary service when there are multiple implementations of ProductService
 //Or by giving a name to the service and in controller adding @Qualifier in the constructor
 @Service("selfProductService")
+@Primary
 public class SelfProductService implements ProductService {
 
     private ProductRepository productRepository;
@@ -119,7 +120,12 @@ public class SelfProductService implements ProductService {
     }
 
     @Override
-    public void deleteProduct(Long id) {
+    public void deleteProduct(Long id) throws ProductNotFoundException {
+
+        if(!productRepository.existsById(id)){
+            throw new ProductNotFoundException("Product not found with a id", id);
+        }
+
         productRepository.deleteById(id);
     }
 }

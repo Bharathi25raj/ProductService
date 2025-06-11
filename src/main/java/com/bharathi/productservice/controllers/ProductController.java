@@ -60,7 +60,7 @@ public class ProductController {
 
     //delete a product
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable("id") Long id){
+    public ResponseEntity<Void> deleteProduct(@PathVariable("id") Long id) throws ProductNotFoundException {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }
