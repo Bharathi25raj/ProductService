@@ -22,7 +22,6 @@ public class Product extends BaseModel {
     private Category category;
     private Double price;
     private String image;
-    private int quantity;
 
    /*
        1                    1
