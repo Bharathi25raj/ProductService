@@ -77,7 +77,7 @@ class ProductControllerTest {
 
         when(productService.getAllProducts()).thenReturn(products);
 
-        assertEquals(products, productController.getAllProducts().getBody());
+        assertEquals(products, productController.getAllProducts("token").getBody());
 
     }
 
